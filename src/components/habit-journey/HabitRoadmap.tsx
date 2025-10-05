@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { Button } from './ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { Badge } from './ui/badge';
-import { Progress } from './ui/progress';
+import { Button } from '../ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
+import { Badge } from '../ui/badge';
+import { Progress } from '../ui/progress';
 import { ArrowLeft, Check, X, Calendar, Trophy, Flame, Target, Award } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { dummyHabitData } from '../../utils/dummyData';
 
 interface RoadmapDay {
   day: number;
@@ -32,7 +34,19 @@ interface HabitRoadmapProps {
   onClaimReward: () => void;
 }
 
-export function HabitRoadmap({ habit, onBack, onToggleDay, onClaimReward }: HabitRoadmapProps) {
+export function HabitJourney() {
+  const [habit, setHabit] = useState<Habit>(dummyHabitData[0]);
+  const navigate = useNavigate();
+
+  const onBack = () => {
+    // Navigate back to dashboard or previous view  
+    navigate('/dashboard');
+  }
+
+  const handleToggleDay = (day: number) => {}
+
+  const handleClaimReward = () => { };
+
   const generateRoadmapDays = (): RoadmapDay[] => {
     const days: RoadmapDay[] = [];
     const startDate = new Date();
@@ -184,7 +198,7 @@ export function HabitRoadmap({ habit, onBack, onToggleDay, onClaimReward }: Habi
               {isCompleted && (
                 <div className="text-center space-y-2">
                   <p className="text-green-400 font-semibold">🎉 Habit Completed! 🎉</p>
-                  <Button onClick={onClaimReward} className="bg-green-500 hover:bg-green-600">
+                  <Button onClick={handleClaimReward} className="bg-green-500 hover:bg-green-600">
                     <Award className="h-4 w-4 mr-2" />
                     Claim Your Reward: {habit.reward}
                   </Button>
@@ -218,11 +232,11 @@ export function HabitRoadmap({ habit, onBack, onToggleDay, onClaimReward }: Habi
                   
                   return (
                     <RoadmapNode
-                      key={day.day}
+                      // key={day.day}
                       day={day}
                       isCompleted={isCompleted}
                       isNext={isNext}
-                      onClick={() => onToggleDay(day.day)}
+                      onClick={() => handleToggleDay(day.day)}
                     />
                   );
                 })}

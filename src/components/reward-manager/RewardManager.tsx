@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
-import { Button } from './ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { Badge } from './ui/badge';
-import { Input } from './ui/input';
-import { Label } from './ui/label';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
+import { Button } from '../ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
+import { Badge } from '../ui/badge';
+import { Input } from '../ui/input';
+import { Label } from '../ui/label';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
 import { ArrowLeft, Award, Trophy, Plus, Gift, Star } from 'lucide-react';
+import { dummyRewardData } from '../../utils/dummyData';
+import { useNavigate } from 'react-router-dom';
+import {toast} from 'sonner';
 
 interface Reward {
   id: string;
@@ -35,8 +38,12 @@ const rewardCategories = [
   { name: 'Other', icon: '🎁', color: 'bg-orange-500/20 text-orange-400' }
 ];
 
-export function RewardManager({ rewards, totalPoints, onBack, onRedeemReward, onAddReward }: RewardManagerProps) {
+export function RewardManager() {
+  const [rewards, setRewards] = useState<Reward[]>(dummyRewardData);
   const [isAddingReward, setIsAddingReward] = useState(false);
+  const [totalPoints,setTotalPoints] = useState(200);
+  const navigate = useNavigate();
+
   const [newReward, setNewReward] = useState({
     name: '',
     description: '',
@@ -47,9 +54,16 @@ export function RewardManager({ rewards, totalPoints, onBack, onRedeemReward, on
   const availableRewards = rewards.filter(r => !r.isRedeemed);
   const redeemedRewards = rewards.filter(r => r.isRedeemed);
 
+  const onBack = () => {
+    // Navigate back to dashboard or previous view  
+    navigate('/dashboard');
+  }
+
+  const handleRedeemReward = (rewardId: string) => { } 
+  
   const handleAddReward = () => {
     if (newReward.name && newReward.pointsCost > 0) {
-      onAddReward(newReward);
+      // onAddReward(newReward);
       setNewReward({ name: '', description: '', pointsCost: 50, category: 'Other' });
       setIsAddingReward(false);
     }
@@ -181,11 +195,10 @@ export function RewardManager({ rewards, totalPoints, onBack, onRedeemReward, on
                       <button
                         key={category.name}
                         type="button"
-                        className={`p-3 rounded-lg border-2 text-left transition-all ${
-                          newReward.category === category.name
+                        className={`p-3 rounded-lg border-2 text-left transition-all ${newReward.category === category.name
                             ? 'border-orange-primary bg-orange-primary/10'
                             : 'border-gray-600 hover:border-orange-primary/50'
-                        }`}
+                          }`}
                         onClick={() => setNewReward({ ...newReward, category: category.name })}
                       >
                         <div className="flex items-center gap-2">
@@ -201,8 +214,8 @@ export function RewardManager({ rewards, totalPoints, onBack, onRedeemReward, on
                   <Button onClick={handleAddReward} className="flex-1 bg-orange-primary hover:bg-orange-secondary">
                     Add Reward
                   </Button>
-                  <Button variant="outline" onClick={() => setIsAddingReward(false)} 
-                          className="border-orange-primary text-orange-primary hover:bg-orange-primary/10">
+                  <Button variant="outline" onClick={() => setIsAddingReward(false)}
+                    className="border-orange-primary text-orange-primary hover:bg-orange-primary/10">
                     Cancel
                   </Button>
                 </div>
@@ -231,11 +244,10 @@ export function RewardManager({ rewards, totalPoints, onBack, onRedeemReward, on
               {availableRewards.map((reward) => {
                 const categoryInfo = getCategoryInfo(reward.category);
                 const canAfford = totalPoints >= reward.pointsCost;
-                
+
                 return (
-                  <Card key={reward.id} className={`bg-card/50 transition-all ${
-                    canAfford ? 'border-orange-primary/40 hover:border-orange-primary' : 'border-gray-600/40'
-                  }`}>
+                  <Card key={reward.id} className={`bg-card/50 transition-all ${canAfford ? 'border-orange-primary/40 hover:border-orange-primary' : 'border-gray-600/40'
+                    }`}>
                     <CardHeader className="pb-3">
                       <div className="flex items-start justify-between">
                         <div className="flex items-center gap-2">
@@ -265,14 +277,13 @@ export function RewardManager({ rewards, totalPoints, onBack, onRedeemReward, on
                         )}
                       </div>
 
-                      <Button 
-                        onClick={() => onRedeemReward(reward.id)}
+                      <Button
+                        onClick={() => handleRedeemReward(reward.id)}
                         disabled={!canAfford}
-                        className={`w-full ${
-                          canAfford 
-                            ? 'bg-orange-primary hover:bg-orange-secondary' 
+                        className={`w-full ${canAfford
+                            ? 'bg-orange-primary hover:bg-orange-secondary'
                             : 'bg-gray-600 cursor-not-allowed'
-                        }`}
+                          }`}
                       >
                         {canAfford ? (
                           <>
@@ -300,7 +311,7 @@ export function RewardManager({ rewards, totalPoints, onBack, onRedeemReward, on
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {redeemedRewards.map((reward) => {
                 const categoryInfo = getCategoryInfo(reward.category);
-                
+
                 return (
                   <Card key={reward.id} className="bg-green-500/5 border-green-500/20">
                     <CardHeader className="pb-3">

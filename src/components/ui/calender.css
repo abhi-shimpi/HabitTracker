@@ -1,0 +1,6 @@
+#calender {
+    .rdp-button:hover:not([disabled]):not(.rdp-day_selected) {
+        background-color: var(--orange-primary) !important;
+        border-radius: .5rem !important;
+    }
+}

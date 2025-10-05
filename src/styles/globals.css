@@ -14,7 +14,7 @@
   --secondary-foreground: #ffffff;
   --muted: #1f1f1f;
   --muted-foreground: #a0a0a0;
-  --accent: #3f3473;
+  --accent: #ff7518;
   --accent-foreground: #ffffff;
   --destructive: #d4183d;
   --destructive-foreground: #ffffff;
@@ -211,11 +211,11 @@ html {
 /* Custom utility classes for the habit tracker */
 @layer utilities {
   .bg-orange-primary {
-    background-color: var(--orange-primary);
+    background-color: var(--orange-primary) !important;
   }
   
   .bg-orange-secondary {
-    background-color: var(--orange-secondary);
+    background-color: var(--orange-secondary) !important;
   }
   
   .bg-orange-light {
@@ -247,5 +247,9 @@ html {
     position: absolute;
     background: linear-gradient(135deg, var(--orange-primary), var(--orange-secondary));
     border-radius: 2px;
+  }
+
+  .text-black-primary {
+    color: var(--black-primary);
   }
 }
