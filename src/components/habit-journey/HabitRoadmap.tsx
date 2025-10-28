@@ -14,6 +14,7 @@ import { ApiLoader } from '../ui/loader';
 import { toast } from 'sonner';
 import { clearLoader, setLoader } from '../../store/loaderSlice';
 import { useDispatch } from 'react-redux';
+import './HabitRoadmap.css';
 
 
 interface Habit {
@@ -428,7 +429,7 @@ export function HabitJourney() {
               </div>
 
               {/* Roadmap Days */}
-              <div className="grid grid-cols-7 gap-4 md:gap-6 lg:gap-8">
+              <div className="roadmap-days-wrapper grid grid-cols-7 gap-4 md:gap-6 lg:gap-8">
                 {habitJourney.map((day) => {
                   return (
                     <div key={day.day}>

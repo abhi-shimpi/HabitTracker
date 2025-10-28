@@ -1,0 +1,21 @@
+.roadmap-days-wrapper {
+  grid-template-columns: repeat(7, 1fr);
+}
+
+@media (max-width: 768px) {
+  .roadmap-days-wrapper {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+}
+
+@media screen and (min-width: 768px) {
+    .roadmap-days-wrapper {
+        grid-template-columns: repeat(5, 1fr) !important;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .roadmap-days-wrapper {
+        grid-template-columns: repeat(7, 1fr) !important;
+    }
+}
