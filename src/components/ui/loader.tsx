@@ -4,14 +4,14 @@ import { motion } from 'framer-motion';
 
 interface ApiLoaderProps {
   message?: string;
-    fullScreen?: boolean;
-    showLoader?: boolean;
+  fullScreen?: boolean;
+  showLoader?: boolean;
 }
 
-export function ApiLoader({ 
-  message = 'Loading your quest data...', 
-    fullScreen = false,
-    showLoader = false
+export function ApiLoader({
+  message = 'Loading your quest data...',
+  fullScreen = false,
+  showLoader = false
 }: ApiLoaderProps) {
   const content = (
     <div className="flex flex-col items-center justify-center gap-6">
@@ -27,7 +27,7 @@ export function ApiLoader({
             ease: "linear"
           }}
         />
-        
+
         {/* Second Ring - Counter Rotate */}
         <motion.div
           className="absolute inset-2 rounded-full border-4 border-transparent border-b-orange-secondary"
@@ -161,15 +161,15 @@ export function ApiLoader({
         <motion.p
           className="text-foreground"
           animate={{ opacity: [0.5, 1, 0.5] }}
-          transition={{ 
-            duration: 2, 
+          transition={{
+            duration: 2,
             repeat: Infinity,
             ease: "easeInOut"
           }}
         >
           {message}
         </motion.p>
-        
+
         {/* Animated Dots */}
         <div className="flex items-center justify-center gap-1">
           {[0, 1, 2].map((i) => (
@@ -195,7 +195,7 @@ export function ApiLoader({
 
   if (fullScreen) {
     return (
-      <div className="fixed inset-0 bg-background/95 backdrop-blur-sm z-50 flex items-center justify-center">
+      <div className="fixed inset-0 bg-background/60 backdrop-blur-sm z-50 flex items-center justify-center">
         {content}
       </div>
     );
@@ -207,3 +207,4 @@ export function ApiLoader({
     </div>
   );
 }
+

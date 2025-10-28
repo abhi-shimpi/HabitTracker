@@ -14,13 +14,18 @@ import endpoints from '../../utils/endpoints';
 import { callPostApi } from '../../services/apiServices';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../hooks/useAuth';
 
 export function Profile() {
     const [loader, setLoader] = useState(false);
     const navigate = useNavigate();
+    const { logoutUser, user } = useAuth();
 
     let userData: any = JSON.parse(getDataFromLocalStorage('userData') ?? '') ?? {};
 
+    if (!userData) {
+        return null;
+    }
     let initials = `${userData?.firstName?.charAt(0)}${userData?.lastName?.charAt(0)}`?.toUpperCase() ?? '';
     let fullName = `${userData?.firstName} ${userData?.lastName}`;
     let daysSinceJoined = Math.floor(
@@ -31,7 +36,7 @@ export function Profile() {
 
     useEffect(() => {
         return () => {
-            
+
         };
     }, []);
 
@@ -39,18 +44,41 @@ export function Profile() {
 
     }
 
+    const debugCookies = () => {
+        console.log('Current cookies:', document.cookie);
+        console.log('All cookies:', document.cookie.split(';').map(c => c.trim()));
+    };
+
     const onLogout = async () => {
         setLoader(true);
 
         try {
+            // Call logout API
             const response = await callPostApi(`${endpoints.LOGOUT}`, {});
-            toast.success("Successfully created habit!");
+            console.log('Logout response:', response);
+
+            // Clear local storage
+            removeDatafromLocalstorage('userData');
+
+            // Use Redux logout action
+            await logoutUser();
+
+            // Show success message
+            toast.success("Successfully logged out!", {
+                description: "You have been signed out of your account"
+            });
+
+            // Navigate to login page
             navigate('/login');
-            removeDatafromLocalstorage('userData')
-            console.log(response);
             setLoader(false);
         } catch (error) {
-            console.error(error);
+            console.error('Logout error:', error);
+
+            // Even if API fails, clear local data and redirect
+            removeDatafromLocalstorage('userData');
+            await logoutUser(); // Clear Redux state
+            toast.error("Logout failed, but local session cleared");
+            navigate('/login');
             setLoader(false);
         }
     }

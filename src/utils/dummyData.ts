@@ -1,33 +1,34 @@
 const dummyHabitData = [
   {
     id: '1',
-    name: 'Morning Workout',
+    habitName: 'Morning Workout',
     category: 'Health & Fitness',
     description: 'Start the day with 30 minutes of exercise',
     difficulty: 2,
     pointsPerDay: 10,
     totalDays: 30,
     completedDays: 7,
-    streak: 3,
+    currentStreak: 3,
     isActive: true,
-    reward: 'New fitness gear',
+    rewardName: 'New fitness gear',
     frequency: 'daily',
+    totalHabitPointsEarned: 0,
     createdDate: new Date(),
-    lastCompletedDate: new Date()
   },
   {
     id: '2',
-    name: 'Read 30 Minutes',
+    habitName: 'Read 30 Minutes',
     category: 'Learning & Education',
     description: 'Daily reading for personal growth',
     difficulty: 1,
     pointsPerDay: 5,
     totalDays: 21,
     completedDays: 14,
-    streak: 5,
+    currentStreak: 5,
     isActive: true,
-    reward: 'Buy 3 new books',
+    rewardName: 'Buy 3 new books',
     frequency: 'daily',
+    totalHabitPointsEarned: 0,
     createdDate: new Date()
   }
 ];
@@ -84,4 +85,4 @@ const dummyRewardData = [
     redeemedDate: new Date()
   }
 ]
-export { dummyHabitData, categories, difficultyLevels, frequencies ,dummyRewardData};
+export { dummyHabitData, categories, difficultyLevels, frequencies, dummyRewardData };

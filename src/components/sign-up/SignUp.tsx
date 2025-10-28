@@ -10,27 +10,16 @@ import { callSignupApi } from '../../services/apiServices';
 import endpoints from '../../utils/endpoints';
 import { useNavigate } from 'react-router-dom';
 
-interface SignUpProps {
-    onSignUp: (userData: {
-        firstName: string;
-        lastName: string;
-        email: string;
-        password: string;
-    }) => void;
-    onBackToLogin?: () => void;
-}
-
 export function SignUp() {
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
         email: '',
         password: '',
-        confirmPassword: ''
     });
     const [showPassword, setShowPassword] = useState(false);
-    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [errors, setErrors] = useState<Record<string, string>>({});
+    const [localLoader, setLocalLoader] = useState(false);
     const navigate = useNavigate();
 
     const validateForm = () => {
@@ -56,22 +45,21 @@ export function SignUp() {
             newErrors.password = 'Password must be at least 8 characters long';
         }
 
-        // if (formData.password !== formData.confirmPassword) {
-        //     newErrors.confirmPassword = 'Passwords do not match';
-        // }
-
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
 
     const onSignUp = async (payload) => {
+        setLocalLoader(true);
         try {
             // Call your sign-up API here
             const response = await callSignupApi(`${endpoints.SIGNUP}`, payload);
             console.log('Sign up successful:', response);
+            setLocalLoader(false);
             // Handle successful sign-up (e.g., redirect to login or dashboard)
             navigate('/login');
         } catch (error) {
+            setLocalLoader(false);
             console.error('Sign up failed:', error);
         }
     }
@@ -283,10 +271,13 @@ export function SignUp() {
                             {/* Submit Button */}
                             <Button
                                 type="submit"
+                                disabled={localLoader}
                                 className="w-full bg-orange-primary hover:bg-orange-secondary"
                             >
-                                <Trophy className="h-4 w-4 mr-2" />
-                                Start Your Quest
+                                {localLoader ? 'Creating account...' : <>
+                                    <Trophy className="h-4 w-4 mr-2" />
+                                    Start Your Quest
+                                </>}
                             </Button>
                         </form>
 

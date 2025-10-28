@@ -5,9 +5,51 @@ interface Habit {
   duration: number;
   frequency: string;
   startDate: Date | null;
-  difficulty: number;
+  difficulty: string;
   rewardName: string;
   rewardCategory: string;
+  rewardLink: string;
+  rewardCost: number;
+}
+
+interface Reward {
+  id: string;
+  name: string;
+  rewardLink?: string;
+  rewardCost: number;
+  productImageUrl?: string;
+  rewardPoints: number;
+  rewardCategory: string;
+  isRedeemed: boolean;
+  redeemedDate?: Date;
+  habitName?: string;
+}
+
+interface HabitCard {
+  id: string,
+  category: string,
+  completedDays: number,
+  currentStreak: number,
+  habitName: number,
+  progress: number,
+  rewardName: string,
+  totalDays: number,
+  totalHabitPointsEarned: number
+}
+
+interface HabitDetails {
+  habitName: string,
+  completedDays: number;
+  totalDays: number;
+  currentStreak: number;
+  highestStreak: number;
+  totalHabitPointsEarned: number;
+  progress: number;
+  frequency: 'daily' | 'weekdays'
+  category: string;
+  rewardId: string;
+  rewardName: string;
+  finalPointsToEarn: string;
   rewardLink: string;
   rewardCost: number;
 }
@@ -20,5 +62,13 @@ interface DashboardData {
   habits: Habit[];
 }
 
+interface JourneyData {
+  day: number;
+  date: string;
+  formatedDate?: string;
+  dailyPoints: number;
+  isTaskCompleted: boolean;
+  isUpdateAllowed: boolean;
+}
 
-export { Habit, DashboardData };
+export { Habit, Reward, DashboardData, HabitCard, HabitDetails, JourneyData };

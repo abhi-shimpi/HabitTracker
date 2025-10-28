@@ -1,7 +1,5 @@
 import axios from 'axios';
 
-const Cookie = 'token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2OGQ3OTZmM2E1YWMyOGE4OThiY2NhNTciLCJpYXQiOjE3NTg5NTk1MTB9.IyxQDK-LxHin2ZXKTrP3paikH9yfoJ-VNyBSNYGFehc; Path=/;';
-
 export const callGetApi = (
     api,
     params,
@@ -26,6 +24,19 @@ export const callSignupApi = (
         .then((response: any) => response)
 }
 
+export const callPatchApi = (
+    api,
+    body,
+    apiConfig = {}
+) => {
+    return axios
+        .patch(api, body, {
+            withCredentials: true,
+            ...apiConfig
+        })
+        .then((response: any) => response)
+}
+
 export const callPostApi = (
     api,
     body,
@@ -35,9 +46,9 @@ export const callPostApi = (
         .post(
             api,
             body, {
-                withCredentials: true,
-                ...apiConfig
-            }
+            withCredentials: true,
+            ...apiConfig
+        }
         )
         .then((response: any) => response)
 }
