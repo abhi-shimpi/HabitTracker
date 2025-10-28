@@ -197,7 +197,6 @@ export function RewardManager() {
 
   return (
     <div className="min-h-screen bg-background p-4 max-w-6xl mx-auto space-y-6">
-      <LoaderExample />
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
@@ -409,80 +408,7 @@ export function RewardManager() {
               return (
                 <Card key={reward.id} className={`bg-card/50 transition-all gap-0 ${canAfford ? 'border-orange-primary/40 hover:border-orange-primary' : 'border-gray-600/40'
                   }`}>
-                  {/* Mobile Layout (< 780px) - Horizontal with image on left */}
-                  <div className="hidden md:hidden">
-                    <div className="flex p-4 gap-4">
-                      {/* Product Image - Left side */}
-                      <div className="relative w-24 h-24 flex-shrink-0 overflow-hidden rounded-lg">
-                        <img
-                          src={reward.productImageUrl}
-                          alt={reward.name}
-                          className="h-full w-full object-cover"
-                          onError={(e) => {
-                            e.currentTarget.src = defaultRewardImageUrl;
-                          }}
-                        />
-                      </div>
-
-                      {/* Reward Details - Right side */}
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-start justify-between mb-2">
-                          <div className="flex-1 min-w-0">
-                            <CardTitle className="text-base truncate">{reward.name}</CardTitle>
-                            {reward.rewardCost > 0 && (
-                              <p className="text-xs text-muted-foreground mt-1">Cost: Rs{reward.rewardCost}</p>
-                            )}
-                          </div>
-                          <Badge className={`${categoryInfo.color} text-xs ml-2`}>
-                            {categoryInfo.text}
-                          </Badge>
-                        </div>
-
-                        <div className="flex items-center gap-2 mb-2">
-                          <Trophy className="h-3 w-3 text-orange-primary" />
-                          <span className="text-sm font-semibold">{reward.rewardPoints} points</span>
-                        </div>
-
-                        {/* Reward Link */}
-                        {reward.rewardLink && (
-                          <div className="mb-2">
-                            <a
-                              href={reward.rewardLink}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-xs text-orange-600 hover:text-orange-800 underline"
-                            >
-                              View Product
-                            </a>
-                          </div>
-                        )}
-
-                        <Button
-                          onClick={() => handleRedeemReward(reward.id)}
-                          disabled={!canAfford}
-                          size="sm"
-                          className={`w-full text-xs ${canAfford
-                            ? 'bg-orange-primary hover:bg-orange-secondary'
-                            : 'bg-gray-600 cursor-not-allowed'
-                            }`}
-                        >
-                          {canAfford ? (
-                            <>
-                              <Award className="h-3 w-3 mr-1" />
-                              Redeem
-                            </>
-                          ) : (
-                            <>
-                              Need {reward.rewardPoints - totalPoints} more
-                            </>
-                          )}
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Desktop Layout (>= 780px) - Vertical */}
-                  <div className="block md:block">
+                  <div className="block">
                     <CardHeader className="pb-3 gap-4 items-center">
                       {/* Product Image */}
                       <div className="relative aspect-square w-full overflow-hidden rounded-t-lg">
@@ -575,64 +501,7 @@ export function RewardManager() {
 
               return (
                 <Card key={reward.id} className="bg-green-500/5 border-green-500/20">
-                  {/* Mobile Layout (< 780px) - Horizontal with image on left */}
-                  <div className="hidden md:hidden">
-                    <div className="flex p-4 gap-4">
-                      {/* Product Image - Left side */}
-                      <div className="relative w-24 h-24 flex-shrink-0 overflow-hidden rounded-lg">
-                        <img
-                          src={reward.productImageUrl}
-                          alt={reward.name}
-                          className="h-full w-full object-cover"
-                          onError={(e) => {
-                            e.currentTarget.src = defaultRewardImageUrl;
-                          }}
-                        />
-                      </div>
-
-                      {/* Reward Details - Right side */}
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-start justify-between mb-2">
-                          <div className="flex-1 min-w-0">
-                            <CardTitle className="text-base flex items-center gap-1 truncate">
-                              {reward.name}
-                              <Star className="h-3 w-3 text-green-500 flex-shrink-0" />
-                            </CardTitle>
-                            {reward.rewardCost > 0 && (
-                              <p className="text-xs text-muted-foreground mt-1">Cost: Rs{reward.rewardCost}</p>
-                            )}
-                          </div>
-                          <Badge className={`${categoryInfo.color} text-xs ml-2`}>
-                            {categoryInfo.text}
-                          </Badge>
-                        </div>
-
-                        {/* Reward Link */}
-                        {reward.rewardLink && (
-                          <div className="mb-2">
-                            <a
-                              href={reward.rewardLink}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-xs text-green-600 hover:text-green-800 underline"
-                            >
-                              View Product
-                            </a>
-                          </div>
-                        )}
-
-                        <div className="flex items-center justify-between text-xs">
-                          <span className="text-green-400">✅ Redeemed</span>
-                          <span className="text-muted-foreground">
-                            {reward.redeemedDate?.toLocaleDateString()}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Desktop Layout (>= 780px) - Vertical */}
-                  <div className="block md:block">
+                  <div className="block">
                     {/* Product Image */}
                     <div className="relative h-32 w-full overflow-hidden rounded-t-lg">
                       <img

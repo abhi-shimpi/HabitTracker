@@ -52,3 +52,17 @@ export const callPostApi = (
         )
         .then((response: any) => response)
 }
+
+export const callDeleteApi = (
+    api,
+    params?: any,
+    apiConfig?: any
+) => {
+    return axios
+        .delete(api, {
+            params: params,
+            withCredentials: true,
+            ...apiConfig
+        })
+        .then((response: any) => response)
+}
