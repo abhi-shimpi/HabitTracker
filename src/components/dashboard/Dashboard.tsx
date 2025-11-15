@@ -63,7 +63,6 @@ export function Dashboard() {
         })
       }
       dispatch(clearLoader());
-      console.log(response);
     } catch (error) {
       console.error(error);
       dispatch(clearLoader());
@@ -80,7 +79,6 @@ export function Dashboard() {
       const response = await callGetApi(`${endpoints.GET_HABITS}`, { isActive: true });
       setHabitData(response?.data);
       dispatch(clearLoader());
-      console.log(response);
     } catch (error) {
       console.error(error);
       dispatch(clearLoader());
@@ -91,7 +89,6 @@ export function Dashboard() {
     try {
       const response = await callGetApi(`${endpoints.GET_HABITS}`, { isActive: false });
       setHabitData(response?.data, false);
-      console.log('Inactive habits:', response);
     } catch (error) {
       console.error('Error fetching inactive habits:', error);
     }
@@ -133,13 +130,11 @@ export function Dashboard() {
 
   function onEditHabit(habitId: string, event: React.MouseEvent) {
     event.stopPropagation(); // Prevent card click
-    console.log('Edit habit:', habitId);
     // TODO: Implement edit habit functionality
   }
 
   async function onInactiveHabit(habitId: string, event: React.MouseEvent) {
     event.stopPropagation(); // Prevent card click
-    console.log('Make habit inactive:', habitId);
     // TODO: Implement inactive habit functionality
     dispatch(setLoader({
       loading: true,
@@ -161,7 +156,6 @@ export function Dashboard() {
 
   async function onDeleteHabit(habitId: string, event: React.MouseEvent) {
     event.stopPropagation(); // Prevent card click
-    console.log('Delete habit:', habitId);
     dispatch(setLoader({
       loading: true,
       message: 'Deleting habit...'
@@ -182,7 +176,6 @@ export function Dashboard() {
 
   async function onReactivateHabit(habitId: string, event: React.MouseEvent) {
     event.stopPropagation(); // Prevent card click
-    console.log('Reactivate habit:', habitId);
     dispatch(setLoader({
       loading: true,
       message: 'Reactivating habit...'

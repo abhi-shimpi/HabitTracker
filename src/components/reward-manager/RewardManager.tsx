@@ -23,22 +23,48 @@ import { useDispatch } from 'react-redux';
 
 export function RewardManager() {
   const [isAddingReward, setIsAddingReward] = useState(false);
-  const [totalPoints, setTotalPoints] = useState(200);
   const [showThreeDotsLoader, setShowThreeDotsLoader] = useState(false);
   const navigate = useNavigate();
   const [redeemedRewards, setRedeemedRewards] = useState<Reward[]>([]);
   const [availableRewards, setAvailableRewards] = useState<Reward[]>([]);
-  const [loaderMessage, setMessage] = useState<string>('Loading your reward manager...');
 
   const dispatch = useDispatch();
+  const [rewardAnalytics, setRewardAnalytics] = useState({
+    totalPoints: 0,
+    availableRewards: 0,
+    redeemedRewards: 0
+  });
   const [newReward, setNewReward] = useState({
     name: '',
     rewardLink: '',
     rewardCost: 0,
-    productImageUrl: defaultRewardImageUrl,
+    productImageUrl: '',
     rewardPoints: 50,
     rewardCategory: 'other'
   });
+
+  async function getHabitAnalytics() {
+    dispatch(setLoader({
+      loading: true,
+      message: 'Loading your habit analytics...'
+    }));
+    try {
+      const response = await callGetApi(`${endpoints.GET_REWARD_ANALYTICS}`, {});
+      setRewardAnalytics({
+        totalPoints: response?.data?.totalPointsEarned,
+        availableRewards: response?.data?.avaliableRewards,
+        redeemedRewards: response?.data?.redeemRewardsCount
+      });
+      dispatch(clearLoader());
+    }
+    catch (error) {
+      console.error(error);
+      dispatch(clearLoader());
+    }
+    finally {
+      dispatch(clearLoader());
+    }
+  }
 
   async function getGeneralRewards() {
     dispatch(setLoader({
@@ -47,7 +73,6 @@ export function RewardManager() {
     }));
     try {
       const response = await callGetApi(`${endpoints.GENERAL_REWARDS}`, {});
-      console.log(response?.data);
 
       // Transform API response to match our Reward interface
       const transformedRewards = (response?.data || []).map((reward: any) => ({
@@ -72,8 +97,6 @@ export function RewardManager() {
       dispatch(clearLoader());
     }
   }
-  console.log(defaultRewardImageUrl);
-  console.log(availableRewards);
   async function getRedeemedRewards() {
     dispatch(setLoader({
       loading: true,
@@ -81,7 +104,6 @@ export function RewardManager() {
     }));
     try {
       const response = await callGetApi(`${endpoints.REDEEMED_REWARDS}`, {});
-      console.log(response?.data);
 
       // Transform API response to match our Reward interface
       const transformedRewards = (response?.data || []).map((reward: any) => ({
@@ -110,6 +132,7 @@ export function RewardManager() {
   }
 
   useEffect(() => {
+    getHabitAnalytics();
     getGeneralRewards();
     getRedeemedRewards();
   }, []);
@@ -168,7 +191,6 @@ export function RewardManager() {
       };
 
       const response = await callPostApi(endpoints.CREATE_REWARD, rewardData);
-      console.log('Reward created successfully:', response?.data);
       toast.success('Reward created successfully!');
 
       // Reset form
@@ -176,7 +198,7 @@ export function RewardManager() {
         name: '',
         rewardLink: '',
         rewardCost: 0,
-        productImageUrl: defaultRewardImageUrl,
+        productImageUrl: '',
         rewardPoints: 50,
         rewardCategory: 'other'
       });
@@ -211,7 +233,7 @@ export function RewardManager() {
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2 bg-card p-3 rounded-lg border border-orange-primary/20">
             <Trophy className="h-5 w-5 text-orange-primary" />
-            <span className="font-semibold">{totalPoints} Points Available</span>
+            <span className="font-semibold">{rewardAnalytics.totalPoints} Points Available</span>
           </div>
         </div>
       </div>
@@ -226,7 +248,7 @@ export function RewardManager() {
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Available Rewards</p>
-                <p className="text-2xl font-bold">{availableRewards.length}</p>
+                <p className="text-2xl font-bold">{rewardAnalytics.availableRewards}</p>
               </div>
             </div>
           </CardContent>
@@ -240,7 +262,7 @@ export function RewardManager() {
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Redeemed</p>
-                <p className="text-2xl font-bold">{redeemedRewards.length}</p>
+                <p className="text-2xl font-bold">{rewardAnalytics.redeemedRewards}</p>
               </div>
             </div>
           </CardContent>
@@ -254,7 +276,7 @@ export function RewardManager() {
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Total Points</p>
-                <p className="text-2xl font-bold">{totalPoints}</p>
+                <p className="text-2xl font-bold">{rewardAnalytics.totalPoints}</p>
               </div>
             </div>
           </CardContent>
@@ -307,7 +329,7 @@ export function RewardManager() {
                   min="0"
                   step="0.01"
                   value={newReward.rewardCost}
-                  onChange={(e) => setNewReward({ ...newReward, rewardCost: parseFloat(e.target.value) || 0 })}
+                  onChange={(e) => setNewReward({ ...newReward, rewardCost: parseFloat(e.target.value) })}
                   placeholder="0.00"
                   className="bg-input border-orange-primary/20 focus:border-orange-primary"
                   required
@@ -333,7 +355,7 @@ export function RewardManager() {
                   type="number"
                   min="1"
                   value={newReward.rewardPoints}
-                  onChange={(e) => setNewReward({ ...newReward, rewardPoints: parseInt(e.target.value) || 50 })}
+                  onChange={(e) => setNewReward({ ...newReward, rewardPoints: parseInt(e.target.value) })}
                   className="bg-input border-orange-primary/20 focus:border-orange-primary"
                   required
                 />
@@ -365,7 +387,7 @@ export function RewardManager() {
                 <Button
                   type="submit"
                   disabled={showThreeDotsLoader}
-                  className="flex-1 bg-orange-primary hover:bg-orange-secondary"
+                  className="flex-1 cursor-pointer bg-orange-primary hover:bg-orange-secondary"
                 >
                   {showThreeDotsLoader ? 'Adding...' : 'Add Reward'}
                 </Button>
@@ -374,7 +396,7 @@ export function RewardManager() {
                   variant="outline"
                   onClick={() => setIsAddingReward(false)}
                   disabled={showThreeDotsLoader}
-                  className="border-orange-primary text-orange-primary hover:bg-orange-primary/10"
+                  className="cursor-pointer border-orange-primary text-orange-primary hover:bg-orange-primary/10"
                 >
                   Cancel
                 </Button>
@@ -403,7 +425,7 @@ export function RewardManager() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {availableRewards.map((reward) => {
               const categoryInfo = getCategoryInfo(reward.rewardCategory);
-              const canAfford = totalPoints >= reward.rewardPoints;
+              const canAfford = rewardAnalytics.totalPoints >= reward.rewardPoints;
 
               return (
                 <Card key={reward.id} className={`bg-card/50 transition-all gap-0 ${canAfford ? 'border-orange-primary/40 hover:border-orange-primary' : 'border-gray-600/40'
@@ -478,7 +500,7 @@ export function RewardManager() {
                           </>
                         ) : (
                           <>
-                            Need {reward.rewardPoints - totalPoints} more points
+                            Need {reward.rewardPoints - rewardAnalytics.totalPoints} more points
                           </>
                         )}
                       </Button>
@@ -500,7 +522,7 @@ export function RewardManager() {
               const categoryInfo = getCategoryInfo(reward.rewardCategory);
 
               return (
-                <Card key={reward.id} className="bg-green-500/5 border-green-500/20">
+                <Card key={reward.id} className="bg-green-500/5 border-green-500/20 p-4 rounded-md">
                   <div className="block">
                     {/* Product Image */}
                     <div className="relative h-32 w-full overflow-hidden rounded-t-lg">
@@ -509,8 +531,7 @@ export function RewardManager() {
                         alt={reward.name}
                         className="h-full w-full object-cover"
                         onError={(e) => {
-                          e.currentTarget.style.display = 'none';
-                          e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                          e.currentTarget.src = defaultRewardImageUrl;
                         }}
                       />
                     </div>

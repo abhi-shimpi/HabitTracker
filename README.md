@@ -17,6 +17,9 @@ Run `npm run dev` to start the development server.
 Remained task -
 
 1. check flow of authentication
+2. Custom days feature
+3. Showing errors in create habit form
+4. removing placeholder from create reward
 
 ---
 

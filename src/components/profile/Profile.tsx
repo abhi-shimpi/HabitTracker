@@ -14,13 +14,14 @@ import endpoints from '../../utils/endpoints';
 import { callPostApi } from '../../services/apiServices';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
+import { setAuthState } from '../../store/authSlice';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../store/appStore';
 
 export function Profile() {
     const [loader, setLoader] = useState(false);
     const navigate = useNavigate();
-    const { logoutUser, user } = useAuth();
-
+    const dispatch = useDispatch<AppDispatch>();
     let userData: any = JSON.parse(getDataFromLocalStorage('userData') ?? '') ?? {};
 
     if (!userData) {
@@ -32,7 +33,6 @@ export function Profile() {
         (new Date().getTime() - new Date(userData.joinedDate)?.getTime()) / (1000 * 60 * 60 * 24)
     ) ?? 0;
 
-    console.log("userData", userData);
 
     useEffect(() => {
         return () => {
@@ -44,24 +44,18 @@ export function Profile() {
 
     }
 
-    const debugCookies = () => {
-        console.log('Current cookies:', document.cookie);
-        console.log('All cookies:', document.cookie.split(';').map(c => c.trim()));
-    };
-
     const onLogout = async () => {
         setLoader(true);
 
         try {
             // Call logout API
             const response = await callPostApi(`${endpoints.LOGOUT}`, {});
-            console.log('Logout response:', response);
 
             // Clear local storage
             removeDatafromLocalstorage('userData');
 
             // Use Redux logout action
-            await logoutUser();
+            dispatch(setAuthState({ isAuthenticated: false, userData: null }));
 
             // Show success message
             toast.success("Successfully logged out!", {
@@ -76,7 +70,7 @@ export function Profile() {
 
             // Even if API fails, clear local data and redirect
             removeDatafromLocalstorage('userData');
-            await logoutUser(); // Clear Redux state
+            dispatch(setAuthState({ isAuthenticated: false, userData: null }));
             toast.error("Logout failed, but local session cleared");
             navigate('/login');
             setLoader(false);

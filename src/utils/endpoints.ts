@@ -25,6 +25,7 @@ const endpoints = {
     REDEEM_GENERAL_REWARD: `${getBaseURL()}/reward/redeem/general`,
     DELETE_HABIT: `${getBaseURL()}/habit/delete`,
     MAKE_HABIT_INACTIVE: `${getBaseURL()}/habit/change/status`,
+    GET_REWARD_ANALYTICS: `${getBaseURL()}/reward-analytics`,
 }
 
 export default endpoints;

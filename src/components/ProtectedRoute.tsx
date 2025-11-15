@@ -1,28 +1,22 @@
 import React, { useEffect } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
+import { userAuth } from '../hooks/userAuth';
 import GlobalLoader from './ui/GlobalLoader';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store/appStore';
 
 interface ProtectedRouteProps {
     children: React.ReactElement;
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-    const { isAuthenticated, isLoading } = useAuth();
-    const navigate = useNavigate();
-
-    // If we're still loading authentication status
-    if (isLoading) {
-        return <GlobalLoader />;
-    }
-
-    // If user is not authenticated, redirect to login
-    if (!isAuthenticated) {
-        return <Navigate to="/login" replace />;
-    }
-
-    // If authenticated, render the protected component
-    return children;
+    userAuth();
+    const isAuthenticated = useSelector((state: RootState) => state.authSlice.isAuthenticated);
+    return (
+        <>
+            {isAuthenticated ? children : <Navigate to="/login" />}
+        </>
+    );
 };
 
 export default ProtectedRoute;

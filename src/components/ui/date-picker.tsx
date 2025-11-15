@@ -5,7 +5,7 @@ import { Button } from '../ui/button';
 import { Calendar as CalendarIcon, Info } from 'lucide-react';
 import { format } from 'date-fns';
 
-export type DateFilterType = 'daily' | 'weekdays' | 'weekend';
+export type DateFilterType = 'daily' | 'weekdays' | 'weekend' | 'custom';
 
 interface SmartDatePickerProps {
   value?: Date;
@@ -156,7 +156,6 @@ export function SmartDatePicker({
               mode="single"
               selected={value}
               onSelect={(date) => {
-                console.log(date)
                 onChange(date);
                 setOpen(false);
               }}

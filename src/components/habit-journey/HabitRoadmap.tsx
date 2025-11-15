@@ -64,7 +64,6 @@ export function HabitJourney() {
       const response = await callGetApi(`${endpoints.VIEW_HABIT}`, { habitId: habitId });
       if (response?.data) setHabitAndRewardDetails(response.data);
       dispatch(clearLoader());
-      console.log(response);
     } catch (error) {
       console.error(error);
       dispatch(clearLoader());
@@ -81,7 +80,6 @@ export function HabitJourney() {
       const response = await callGetApi(`${endpoints.GET_HABIT_JOURNEY}`, { habitId: habitId });
       if (response?.data?.journeyData) setHabitJourneyDetails(response.data.journeyData);
       dispatch(clearLoader());
-      console.log(response);
     } catch (error) {
       console.error(error);
       dispatch(clearLoader());
@@ -89,7 +87,6 @@ export function HabitJourney() {
   }
 
   const setHabitAndRewardDetails = (response) => {
-    console.log(response);
     const data: HabitDetails = {
       habitName: response?.habitName,
       completedDays: response?.completedDays,
@@ -125,7 +122,6 @@ export function HabitJourney() {
 
     setHabitJourney(journeyData)
   }
-  console.log("habitJourney", habitJourney)
   const onBack = () => {
     // Navigate back to dashboard or previous view  
     navigate('/dashboard');
@@ -145,7 +141,6 @@ export function HabitJourney() {
       const response = await callPostApi(`${endpoints.LOG_HABIT}`, payload);
       getHabitDetails();
       getHabitJourney();
-      console.log(response);
       toast.success("Successfully logged the habit!");
     } catch (error) {
       toast.error(error.message);
@@ -447,7 +442,7 @@ export function HabitJourney() {
             <div className="mt-8 flex justify-center">
               <div className="flex items-center gap-6 text-sm bg-card/50 p-4 rounded-lg border border-orange-primary/20">
                 <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 rounded-full bg-gradient-to-br from-orange-primary to-orange-secondary shadow-lg animate-pulse"></div>
+                  <div className="w-4 h-4 rounded-full bg-gradient-to-br from-orange-primary to-orange-secondary shadow-lg"></div>
                   <span className="font-semibold">Completed</span>
                 </div>
                 <div className="flex items-center gap-2">
