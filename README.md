@@ -6,18 +6,6 @@ Run `npm i` to install the dependencies.
 
 Run `npm run dev` to start the development server.
 
-1.integrate active habits api - done
-2.integrate view habit api - done
-3.integrate log habit api - done
-4.make UI elements responsive
-5.Adding favicon and title 6. View rewards page 7. Local component loader 8. Guard at routing 9. placeholders
-
----
-
-Remained task -
-
-1. check flow of authentication
-
 ---
 
 ## 🧩 1. What is `JSX.Element`?

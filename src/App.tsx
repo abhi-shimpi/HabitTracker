@@ -5,19 +5,16 @@ import AppRouter from './AppRouting';
 import appStore from './store/appStore';
 import { Provider } from 'react-redux';
 import GlobalLoader from './components/ui/GlobalLoader';
-import AuthInitializer from './components/AuthInitializer';
 
 export default function App() {
   return (
     <div className="dark min-h-screen bg-background">
       <Provider store={appStore}>
-        <AuthInitializer>
-          <Router>
-            <Toaster position="top-right" />
-            <AppRouter />
-            <GlobalLoader />
-          </Router>
-        </AuthInitializer>
+        <Router>
+          <Toaster position="top-right" />
+          <AppRouter />
+          <GlobalLoader />
+        </Router>
       </Provider>
     </div>
   );

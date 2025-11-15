@@ -4,6 +4,7 @@ interface Habit {
   description: string;
   duration: number;
   frequency: string;
+  customDays?: number[];
   startDate: Date | null;
   difficulty: string;
   rewardName: string;

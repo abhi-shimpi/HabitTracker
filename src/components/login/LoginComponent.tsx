@@ -9,7 +9,9 @@ import { callPostApi, callSignupApi } from '../../services/apiServices';
 import endpoints from '../../utils/endpoints';
 import { toast } from 'sonner';
 import { setDataToLocalStorage } from '../../services/localStorageService';
-import { useAuth } from '../../hooks/useAuth';
+import { setAuthState } from '../../store/authSlice';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../store/appStore';
 
 export default function Login() {
     const [formData, setFormData] = useState({
@@ -20,8 +22,7 @@ export default function Login() {
     const [errors, setErrors] = useState<Record<string, string>>({});
     const [localLoader, setLocalLoader] = useState(false);
     const navigate = useNavigate();
-    const { loginUser, setAuthToken } = useAuth();
-
+    const dispatch = useDispatch<AppDispatch>();
     const validateForm = () => {
         const newErrors: Record<string, string> = {};
 
@@ -46,15 +47,9 @@ export default function Login() {
             // Call your login API here
             const response = await callPostApi(`${endpoints.LOGIN}`, payload);
             setLocalLoader(false);
-            console.log('Sign in successful:', response);
 
             // Set user data in Redux store
             setUserData(response?.data);
-
-            // For cookie-based auth, we don't need to set token manually
-            // The backend sets HTTP-only cookies automatically
-            // We just need to mark user as authenticated
-            setAuthToken('cookie-based-auth'); // Placeholder token for Redux state
 
             toast.success(`Welcome back, ${response?.data?.firstName}! 🎉`, {
                 description: "Ready to continue your habit journey?"
@@ -70,7 +65,6 @@ export default function Login() {
     };
 
     const setUserData = (data: any) => {
-        console.log(data)
         if (data) {
             const userData = {
                 firstName: data.firstName,
@@ -78,11 +72,9 @@ export default function Login() {
                 email: data.emailId,
                 joinedDate: data.createdAt
             }
-            console.log("JSON.stringify(userData)", JSON.parse(JSON.stringify(userData)))
-            console.log("JSON.stringify(userData)", { ...userData })
             setDataToLocalStorage('userData', userData);
             // Also set user data in Redux store
-            loginUser(userData);
+            dispatch(setAuthState({ isAuthenticated: true, userData: userData }));
         }
     }
 
@@ -158,6 +150,7 @@ export default function Login() {
                                 <Input
                                     id="email"
                                     type="email"
+                                    disabled={localLoader}
                                     value={formData.email}
                                     onChange={(e) => handleInputChange('email', e.target.value)}
                                     placeholder="john.doe@example.com"
@@ -180,6 +173,7 @@ export default function Login() {
                                         id="password"
                                         type={showPassword ? 'text' : 'password'}
                                         value={formData.password}
+                                        disabled={localLoader}
                                         onChange={(e) => handleInputChange('password', e.target.value)}
                                         placeholder="Enter your password"
                                         className={`bg-input border-orange-primary/20 focus:border-orange-primary pr-10 ${errors.password ? 'border-red-500' : ''

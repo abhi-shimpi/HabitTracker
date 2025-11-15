@@ -1,23 +1,19 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
-import { useAuth } from "./hooks/useAuth";
+import { userAuth } from "./hooks/userAuth";
 import GlobalLoader from "./components/ui/GlobalLoader";
+import { useSelector } from "react-redux";
+import { RootState } from "./store/appStore";
 
 export const PublicRoute: React.FC<{ children: React.ReactElement }> = ({ children }) => {
-    const { isAuthenticated, isLoading } = useAuth();
+    userAuth();
+    const isAuthenticated = useSelector((state: RootState) => state.authSlice.isAuthenticated);
 
-    // If we're still loading authentication status
-    if (isLoading) {
-        return <GlobalLoader />;
-    }
-
-    // If user is authenticated, redirect to dashboard
-    if (isAuthenticated) {
-        return <Navigate to="/dashboard" replace />;
-    }
-
-    // If not authenticated, allow access to public routes
-    return children;
+    return (
+        <>
+            {isAuthenticated ? <Navigate to="/dashboard" replace /> : children}
+        </>
+    );
 };
 
 

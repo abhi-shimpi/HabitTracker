@@ -54,7 +54,6 @@ export function SignUp() {
         try {
             // Call your sign-up API here
             const response = await callSignupApi(`${endpoints.SIGNUP}`, payload);
-            console.log('Sign up successful:', response);
             setLocalLoader(false);
             // Handle successful sign-up (e.g., redirect to login or dashboard)
             navigate('/login');
